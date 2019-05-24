@@ -1,5 +1,5 @@
 export default {
-  headline: '36px',
+  headline: '28px',
   subtitle: '18px',
   paragraph: '16px',
   small: '13px'
