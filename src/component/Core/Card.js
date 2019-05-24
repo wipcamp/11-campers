@@ -3,22 +3,30 @@ import {
   Card, Button, CardImg, CardTitle, CardText,
   CardSubtitle, CardBody
 } from 'reactstrap';
-import Headline from './Text'
+import Headline, { Subtitle } from './Text'
 
 
 const ComponentCard = (props) => {
   return (
-    <Card>
+    <Card className="p-3">
       <CardImg />
       <CardBody>
         <CardTitle>
-          <Headline>
+          <Headline className="text-center">
             {props.title}
           </Headline>
-          </CardTitle>
-        <CardSubtitle>Card subtitle</CardSubtitle>
-        <CardText>Some quick example text to build on the card title and make up the bulk of the card's content.</CardText>
-        <Button>Button</Button>
+        </CardTitle>
+        <CardSubtitle>
+          <Subtitle className="text-center">
+            {props.subtitle}
+          </Subtitle>
+        </CardSubtitle>
+        <CardText >
+          {props.text}
+        </CardText>
+        <div className={props.position}>
+          <Button>{props.textBtn}</Button>
+        </div>
       </CardBody>
     </Card>
   );
