@@ -32,7 +32,7 @@ myReader.on('card-inserted', async person => {
   fileStream.write(photoBuff)
   fileStream.close()
   // io.emit(`photoClient`, photoBuff)
-  io.emit(`personClient`, { id: cid, name_th: nameTH, name_en: nameEN, photo: photoBuff })
+  io.emit(`personClient`,{id: cid,photo: photoBuff })
 })
 
 myReader.on('device-deactivated', () => { console.log('device-deactivated') })
