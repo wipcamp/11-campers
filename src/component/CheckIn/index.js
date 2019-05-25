@@ -2,18 +2,16 @@ import React, { Component } from 'react';
 import socketIOClient from 'socket.io-client'
 import { Container, Row, Col, Button, Input } from 'reactstrap';
 import styled from 'styled-components'
-import swl from 'sweetalert2'
 import Card from '../Core/Card';
 import Bg from '../Core/Background'
 import RuleText from '../Core/RuleWiFiText'
 import service from '../../service/serviceprofile';
 
+const socket = socketIOClient(process.env.REACT_APP_PATH_SOCKET)
+
 const Btn = styled.div`
   visibility : ${props => props.show};
 `
-const socket = socketIOClient(process.env.REACT_APP_PATH_SOCKET)
-console.log(socket)
-
 class checkIn extends Component {
   state = {
     id: null,
@@ -43,9 +41,6 @@ class checkIn extends Component {
       checkdata : 'ยืนยันข้อมูล'
     })
     this.getPerson()
-    // swl.fire(
-    //   'กรุณาเสียบบัตรประชาชน'
-    // )
   }
 
   getPerson = async (e) => {
@@ -60,15 +55,6 @@ class checkIn extends Component {
         photo: imgStr
       })
       console.log(response)
-    })
-  }
-
-  getPhoto() {
-    socket.on('photoClient', (res) => {
-      const imgStr = String.fromCharCode.apply(null, new Uint8Array(res));
-      this.setState({
-        photo: imgStr
-      })
     })
   }
 
@@ -89,7 +75,7 @@ class checkIn extends Component {
                       </Col>
                       <Col md={{ size: 9}}>
                         ข้อมูลส่วนตัว (กรุณาตรวจสอบข้อมูล)<br/>
-                        เลขบัตรประชำตัว : {this.state.id}<br/>
+                        เลขบัตรประจำตัว : {this.state.id}<br/>
                         ชื่อ-นามสกุล (ไทย) :  {this.state.nameTH} <br/>
                         ชื่อ-นามสกุล (อังกฤษ) : {this.state.nameEN} <br/>
                         <br/>
