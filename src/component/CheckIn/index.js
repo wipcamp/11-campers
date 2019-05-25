@@ -11,7 +11,8 @@ import service from '../../service/serviceprofile';
 const Btn = styled.div`
   visibility : ${props => props.show};
 `
-const socket = socketIOClient('http://localhost:3002')
+const socket = socketIOClient(process.env.REACT_APP_PATH_SOCKET)
+console.log(socket)
 
 class checkIn extends Component {
   state = {
