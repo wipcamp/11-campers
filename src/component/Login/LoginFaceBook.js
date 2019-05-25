@@ -1,8 +1,7 @@
-import styled from 'styled-components'
 import React from 'react'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
-import AuthService from '../../service/AuthService'
 import CookiesService from 'js-cookie';
+import AuthService from '../../service/AuthService'
 
 class LoginFaceBook extends React.Component {
    responseFacebook = async (response) => {
@@ -11,7 +10,7 @@ class LoginFaceBook extends React.Component {
   }
   changetoRegisterPage = async (role) => {
     try {
-      if (CookiesService.get('tokenJWT')) {
+      if (CookiesService.get('JWT')) {
         if(parseInt(role) == 10){
           console.log(role,'ok')
         }else{

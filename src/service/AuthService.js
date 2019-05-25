@@ -8,10 +8,9 @@ const AuthService = {
         'provider_name': 'facebook',
         'provider_id': request.userID,
         'accessToken': request.accessToken,
-        'role': 1
       })
       if (res) {
-        Cookies.set('tokenJWT', res.data.token)
+        Cookies.set('JWT', res.data.token)
         Cookies.set('wip_Id', res.data.wip_id)
         return res
       }
@@ -21,9 +20,8 @@ const AuthService = {
   getRole: async ()=>{
     return await api.get('/myrole').catch(error =>{
       if(error == 'Request failed with status code 401'){
-        
-        // Cookies.removeJWTAndWipIdCookie()
-        // location.reload()
+        Cookies.remove('JWT')
+        window.location.reload()
       }
     })
   }
