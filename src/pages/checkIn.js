@@ -20,7 +20,9 @@ class checkIn extends Component {
     showBtn: 'hidden',
     showID: false,
     height: '',
-    subtitle: "พรบ.คอมพิวเตอร์"
+    subtitle: "พ.ร.บ.คอมพิวเตอร์",
+    nameTH: '',
+    nameEN: ''
   }
 
   handleClick = (e) => {
@@ -37,19 +39,23 @@ class checkIn extends Component {
       height: '100vh',
       subtitle: 'ยืนยันชื่อ-นามสกุล'
     })
-    this.getID()
+    this.getPerson()
     swl.fire(
       'กรุณาเสียบบัตรประชาชน'
     )
   }
 
-  getID = async (e) => {
-    socket.on('personIdClient', async (res) => {
-      this.setState({
-        id: res
-      })
-      let response = await service.getProfile(res)
+  getPerson = async (e) => {
+    socket.on('personClient', async (res) => {
       console.log(res)
+      const imgStr = String.fromCharCode.apply(null, new Uint8Array(res.photo));
+      this.setState({
+        id: res.id,
+        nameTH: res.name_th.prefix + " " + res.name_th.firstname + " " + res.name_th.lastname,
+        nameEN: res.name_en.prefix + " " + res.name_en.firstname + " " + res.name_en.lastname,
+        photo: imgStr
+      })
+      // let response = await service.getProfile(res)
     })
   }
 
@@ -63,8 +69,7 @@ class checkIn extends Component {
   }
 
   render() {
-    this.getID()
-    this.getPhoto()
+    this.getPerson()
     return (
       <React.Fragment>
         <Bg height={this.state.height}>
@@ -74,9 +79,21 @@ class checkIn extends Component {
                 <Card
                   title="Wip Camp #11"
                   text={this.state.showID ?
-                    <div>
-                      <img src={`data:image/jpeg;base64,${btoa(this.state.photo)}`}/>
-                    </div> : <RuleText />}
+                    <Row>
+                      <Col md={{ size: 3}}>
+                        <img src={`data:image/jpeg;base64,${btoa(this.state.photo)}`} />
+                      </Col>
+                      <Col md={{ size: 9}}>
+                        เลขบัตรประชำตัว : {this.state.id}<br/>
+                        ชื่อ-นามสกุล (ไทย) :  {this.state.nameTH} <br/>
+                        ชื่อ-นามสกุล (อังกฤษ) : {this.state.nameEN} <br/>
+
+                        ข้อมูลค่าย <br/>
+                        รส : 
+                        ห้องพัก : 
+                      </Col>
+                    </Row>
+                    : <RuleText />}
                   subtitle={this.state.subtitle}
                   position="row justify-content-end" >
                 </Card>
