@@ -1,11 +1,7 @@
-import api from './../config/axios'
+import api from '../config/apicampers'
 
 const service =
 {
-  getProfile: async (id) => {
-    const header = id
-    return await api.get('', header)
-  },
   getScore: async () => {
     return await api.get('test/score')
   },
@@ -15,7 +11,7 @@ const service =
   updateScore: async (data,header) => {
     return await api.put('', data, header)
   }
-
+    
 }
 
 export default service;

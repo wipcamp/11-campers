@@ -3,14 +3,15 @@ import Card from '../component/Core/Card';
 import { Container, Row, Col } from 'reactstrap';
 import socketIOClient from 'socket.io-client'
 import RuleText from '../component/Core/RuleWiFiText'
-import service from './../service/service'
+import serviceProfile from '../service/serviceprofile'
 
 const socket = socketIOClient('http://localhost:3002')
 class checkIn extends Component {
 
   render() {
-    socket.on('personIdClient', (res) => {
-      console.log(res)
+    socket.on('personIdClient', async (res) => {
+    let response = await  serviceProfile.getProfile(1101700256341)
+    console.log(response)
     })
     return (
       <Container>
