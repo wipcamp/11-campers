@@ -1,12 +1,11 @@
 import axios from 'axios'
-import Cookies from 'js-cookie'
-
+import CookiesService from 'js-cookie'
 
 const createInstance = (headers) => {
   return axios.create({
-    baseURL: process.env.REACT_APP_PATH_REGISTANCE,
+    baseURL: process.env.REACT_APP_PATH_AUTH,
     headers: {
-      'Authorization': `Bearer ${Cookies.get('JWT')}`,
+      'Authorization': `Bearer ${CookiesService.get('JWT')}`,
       'Content-Type': 'application/json'
     }
   })
