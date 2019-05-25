@@ -3,7 +3,7 @@ let api ={
     get:(path,header) => {
         Axios({
             method: 'get',
-            url: `/${path}`,
+            url: `${process.env.REACT_APP_PATH_CAMPERS}/${path}`,
             withCredentials: true,//อันนี้ไม่ชัวต้องใส่ไหม
             headers: { 'Authorization': `Bearer ${header}` }
         })
@@ -12,7 +12,7 @@ let api ={
         Axios({
             method: 'post',
             body:body,
-            url: `/${path}`,
+            url: `${process.env.REACT_APP_PATH_CAMPERS}/${path}`,
             withCredentials: true,//อันนี้ไม่ชัวต้องใส่ไหม
             headers: { 'Authorization': `Bearer ${header}` }
         })
@@ -20,7 +20,7 @@ let api ={
         Axios({
             method: 'put',
             body:body,
-            url: `/${path}`,
+            url: `${process.env.REACT_APP_PATH_CAMPERS}/${path}`,
             withCredentials: true,//อันนี้ไม่ชัวต้องใส่ไหม
             headers: { 'Authorization': `Bearer ${header}` }
         })

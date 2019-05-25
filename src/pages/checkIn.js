@@ -3,6 +3,7 @@ import Card from '../component/Core/Card';
 import { Container, Row, Col } from 'reactstrap';
 import socketIOClient from 'socket.io-client'
 import RuleText from '../component/Core/RuleWiFiText'
+import service from './../service/service'
 
 const socket = socketIOClient('http://localhost:3002')
 class checkIn extends Component {
@@ -11,7 +12,6 @@ class checkIn extends Component {
     socket.on('personIdClient', (res) => {
       console.log(res)
     })
-
     return (
       <Container>
         <Row>
