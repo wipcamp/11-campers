@@ -18,12 +18,7 @@ myReader.on('error', async (err) => {
 
 myReader.on('card-inserted', async person => {
   const cid = await person.getCid()
-  const nameTH = await person.getNameTH()
-  const nameEN = await person.getNameEN()
-
   console.log(`CitizenID: ${cid}`)
-  // io.emit(`personIdClient`, cid)
-
   console.log('=============================================')
   console.log('Receiving Image')
   const photo = await person.getPhoto()
@@ -31,7 +26,6 @@ myReader.on('card-inserted', async person => {
   const photoBuff = Buffer.from(photo)
   fileStream.write(photoBuff)
   fileStream.close()
-  // io.emit(`photoClient`, photoBuff)
   io.emit(`personClient`,{id: cid,photo: photoBuff })
 })
 

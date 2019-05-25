@@ -4,13 +4,29 @@ import AuthService from '../../service/AuthService'
 import { Redirect } from 'react-router'
 import Swl from 'sweetalert2'
 import Bg from '../Core/Background'
+import socketIOClient from 'socket.io-client'
+import Card from '../Core/Card'
+import { Container, Row, Col, Button, Input } from 'reactstrap';
+import service from '../../service/serviceprofile';
+import ProfileService from '../../service/serviceprofile'
 
-
+const socket = socketIOClient(process.env.REACT_APP_PATH_SOCKET)
 
 class index extends Component {
 
   state = {
-    redirect: false
+    redirect: false,
+    id: null,
+    photo: null,
+    showBtn: 'hidden',
+    showID: false,
+    height: '',
+    nameTH: '',
+    nameEN: '',
+    lastname_en: '',
+    lastname_th: '',
+    editdata: true,
+    btn: false,
   }
 
   componentDidMount() {
@@ -35,17 +51,47 @@ class index extends Component {
 
   checkCookie = async () => {
     try {
-      if (CookiesService.get('JWT') == null) {
+      if (CookiesService.get('JWT') != null) {
         this.setState({
-          redirect: true
+          redirect: false
         })
       } else {
         this.setState({
-          redirect: false
+          redirect: true
         })
       }
     } catch (e) {
     }
+  }
+
+  getPerson = async (e) => {
+    socket.on('personClient', async (res) => {
+      console.log(res)
+      let response = await service.getProfile(res.id)
+      const imgStr = String.fromCharCode.apply(null, new Uint8Array(res.photo));
+      this.setState({
+        id: res.id,
+        nameTH: response.data.profile.firstname_th,
+        lastname_th: response.data.profile.lastname_th,
+        nameEN: response.data.profile.firstname_en,
+        lastname_en: response.data.profile.lastname_en,
+        photo: imgStr
+      })
+      console.log(response)
+    })
+  }
+
+  handleData = () => {
+    this.setState({ editdata: true })
+    const { nameEN, nameTH, id, lastname_en, lastname_th } = this.state
+    console.log(this.state.nameEN, this.state.nameTH)
+    let res = ProfileService.editProfileByAdmin({
+      id: id,
+      nameTH: nameTH,
+      lastname_th: lastname_th,
+      nameEN: nameEN,
+      lastname_en: lastname_en
+    })
   }
 
 
@@ -53,9 +99,55 @@ class index extends Component {
     if (this.state.redirect) {
       return <Redirect push to="/login" />
     }
+    this.getPerson()
     return (
       <Bg height="100vh">
-        hi
+        <Container>
+          <Row>
+            <Col sm="12" md={{ size: 10, offset: 1 }} className="p-5" style={{ zIndex: 10 }}>
+              <Card
+                title="Wip Camp #11"
+                text={
+                  <Row>
+                    <Col className="text-center" md={{ size: 3 }}>
+                      <img src={`data:image/jpeg;base64,${btoa(this.state.photo)}`} /><br /><br />
+                      <Button onClick={() => this.setState({ editdata: false })}
+                        disabled={this.state.editdata ? false : true}>
+                        แก้ไขข้อมูล
+                        </Button>
+                      <Button onClick={() => this.handleData()}
+                        disabled={this.state.editdata ? true : false}>
+                        บันทึกข้อมูล
+                      </Button>
+                    </Col>
+                    <Col md={{ size: 9 }}>
+                      ข้อมูลส่วนตัว (กรุณาตรวจสอบข้อมูล)<br />
+                      เลขบัตรประจำตัว : {this.state.id}<br />
+                      ชื่อ-นามสกุล (ไทย) :
+                      <Input defaultValue={this.state.nameTH}
+                        onChange={(e) => this.setState({ nameTH: e.target.value })}
+                        disabled={this.state.editdata} />
+                      <Input defaultValue={this.state.lastname_th}
+                        onChange={(e) => this.setState({ lastname_th: e.target.value })}
+                        disabled={this.state.editdata} />
+                      ชื่อ-นามสกุล (อังกฤษ) :
+                      <Input defaultValue={this.state.nameEN}
+                        onChange={(e) => this.setState({ nameEN: e.target.value })}
+                        disabled={this.state.editdata} />
+                      <Input defaultValue={this.state.lastname_en}
+                        onChange={(e) => this.setState({ lastname_en: e.target.value })}
+                        disabled={this.state.editdata} />
+                      <br />
+                      ข้อมูลค่าย <br />
+                      รส :  <br />
+                      ห้องพัก : <br />
+                    </Col>
+                  </Row>
+                }
+              />
+            </Col>
+          </Row>
+        </Container>
       </Bg>
     );
   }
