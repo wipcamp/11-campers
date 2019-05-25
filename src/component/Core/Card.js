@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Card, Button, CardImg, CardTitle, CardText,
+  Card,CardImg, CardTitle, CardText,
   CardSubtitle, CardBody
 } from 'reactstrap';
 import Headline, { Subtitle } from './Text'
@@ -24,9 +24,6 @@ const ComponentCard = (props) => {
         <CardText >
           {props.text}
         </CardText>
-        <div className={props.position}>
-          <Button>{props.textBtn}</Button>
-        </div>
       </CardBody>
     </Card>
   );
