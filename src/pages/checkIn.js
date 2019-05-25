@@ -6,7 +6,6 @@ import { Container, Row, Col, Button, Input } from 'reactstrap';
 import Bg from '../component/Core/Background'
 import styled from 'styled-components'
 import swl from 'sweetalert2'
-import service from './../service/service'
 
 const Btn = styled.div`
   visibility : ${props => props.show};
@@ -52,7 +51,6 @@ class checkIn extends Component {
   }
 
   getPhoto() {
-    const file = new 
     socket.on('photoClient', (res) => {
       this.setState({
         photo: res.data
