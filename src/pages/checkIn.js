@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import Card from '../component/Core/Card';
 import socketIOClient from 'socket.io-client'
-import RuleText from '../component/Core/RuleWiFiText'
 import { Container, Row, Col, Button, Input } from 'reactstrap';
-import Bg from '../component/Core/Background'
 import styled from 'styled-components'
 import swl from 'sweetalert2'
+import Card from '../component/Core/Card';
+import Bg from '../component/Core/Background'
+import RuleText from '../component/Core/RuleWiFiText'
+import service from '../service/serviceprofile';
 
 const Btn = styled.div`
   visibility : ${props => props.show};
@@ -42,11 +43,12 @@ class checkIn extends Component {
   }
 
   getID = async (e) => {
-    socket.on('personIdClient', (res) => {
+    socket.on('personIdClient', async (res) => {
       this.setState({
         id: res
       })
-      console.log(res)
+      let response = await service.getProfile(res)
+      console.log(response)
     })
   }
 
