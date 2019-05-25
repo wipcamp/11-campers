@@ -1,4 +1,6 @@
 require('dotenv').config()
+    
+const fs = require('fs')
 
 const { Reader } = require('thaismartcardreader.js')
 
@@ -17,11 +19,19 @@ myReader.on('error', async (err) => {
 myReader.on('card-inserted', async person => {
   const cid = await person.getCid()
   const gender = await person.getGender()
-  const photo = await person.getPhoto()
+
   console.log(`CitizenID: ${cid}`)
   console.log(`Gender : ${gender}`)
   io.emit(`personIdClient`, cid)
-  // io.emit(`personIdClient`, photo)
+
+  console.log('=============================================')
+  console.log('Receiving Image')
+  const photo = await person.getPhoto()
+  const fileStream = fs.createWriteStream(`${cid}.bmp`)
+  const photoBuff = Buffer.from(photo)
+  fileStream.write(photoBuff)
+  fileStream.close()
+  io.emit(`photoClient`, photoBuff)
 })
 
 myReader.on('device-deactivated', () => { console.log('device-deactivated') })

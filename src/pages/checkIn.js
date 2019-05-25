@@ -19,8 +19,8 @@ class checkIn extends Component {
     photo: null,
     showBtn: 'hidden',
     showID: false,
-    height : '',
-    subtitle : "พรบ.คอมพิวเตอร์"
+    height: '',
+    subtitle: "พรบ.คอมพิวเตอร์"
   }
 
   handleClick = (e) => {
@@ -32,14 +32,15 @@ class checkIn extends Component {
   }
 
   showID = () => {
-    swl.fire(
-      'กรุณาเสียบบัตรประชาชน'
-    )
     this.setState({
       showID: true,
       height: '100vh',
-      subtitle:'ยืนยันชื่อ-นามสกุล'
+      subtitle: 'ยืนยันชื่อ-นามสกุล'
     })
+    this.getID()
+    swl.fire(
+      'กรุณาเสียบบัตรประชาชน'
+    )
   }
 
   getID = async (e) => {
@@ -48,21 +49,22 @@ class checkIn extends Component {
         id: res
       })
       let response = await service.getProfile(res)
-      console.log(response)
+      console.log(res)
     })
   }
 
   getPhoto() {
     socket.on('photoClient', (res) => {
+      const imgStr = String.fromCharCode.apply(null, new Uint8Array(res));
       this.setState({
-        photo: res.data
+        photo: imgStr
       })
-      console.log(res.data)
     })
   }
 
   render() {
     this.getID()
+    this.getPhoto()
     return (
       <React.Fragment>
         <Bg height={this.state.height}>
@@ -71,7 +73,10 @@ class checkIn extends Component {
               <Col sm="12" md={{ size: 8, offset: 2 }} className="p-5" style={{ zIndex: 10 }}>
                 <Card
                   title="Wip Camp #11"
-                  text={this.state.showID ? this.state.id : <RuleText />}
+                  text={this.state.showID ?
+                    <div>
+                      <img src={`data:image/jpeg;base64,${btoa(this.state.photo)}`}/>
+                    </div> : <RuleText />}
                   subtitle={this.state.subtitle}
                   position="row justify-content-end" >
                 </Card>
