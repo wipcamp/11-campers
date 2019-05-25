@@ -10,5 +10,5 @@ body {
 code {
   font-family: "MyFont",source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
-    src: local('MyFont'), url(../src/font/Sarabun-Regular.ttf) format('ttf');
+    src: local('MyFont'), url(/font/Sarabun-Regular.ttf) format('ttf');
 }

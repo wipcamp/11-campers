@@ -10,5 +10,6 @@ export default {
   placeHolderText: '#BFBFBF',
   borderColor: '#D9D9D9',
   hover: '#F0F0F0',
-  bgcolor: 'linear-gradient(#fff,#F8E9D6)'
+  bgcolor: 'linear-gradient(#fff,#F8E9D6)',
+  bgImg: `url(/img/desktopWall_wip.png)`,
 }
