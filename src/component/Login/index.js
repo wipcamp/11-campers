@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
 import ButtonLogin from './LoginFaceBook'
 import { Container, Row, Col } from 'reactstrap';
-import styled from 'styled-components'
 import Bg from '../Core/Background'
-
-// const Button = styled(ButtonLogin)`
-//   margin-top:100%;
-//   background-color : #000;
-// `
 
 class index extends Component {
   render() {

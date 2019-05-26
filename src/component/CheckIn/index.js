@@ -7,6 +7,7 @@ import Bg from '../Core/Background'
 import RuleText from '../Core/RuleWiFiText'
 import service from '../../service/serviceprofile';
 import CamperService from '../../service/servicecampers'
+import Swal from 'sweetalert2'
 
 const socket = socketIOClient(process.env.REACT_APP_PATH_SOCKET)
 
@@ -36,7 +37,13 @@ class checkIn extends Component {
     img: '/img/insteadcitizenpic.jpg',
     over: false,
     showConfirm: 'hidden',
-    wifi: false
+    wifi: false,
+    flavor: '',
+    room: '',
+    wipId : null,
+    reload : false,
+    lastnameTH : '',
+    lastnameEN : ''
   }
 
   handleCheck = (e) => {
@@ -57,24 +64,81 @@ class checkIn extends Component {
     this.getPerson()
   }
 
-  getPerson = async (e) => {
+  getPerson = async () => {
     socket.on('personClient', async (res) => {
-      console.log(res)
       let response = await service.getProfile(res.id)
+      this.setFlavor(response.data.camper.flavor_id)
       const imgStr = String.fromCharCode.apply(null, new Uint8Array(res.photo));
-      this.setState({
-        id: res.id,
-        nameTH: response.data.profile.firstname_th + " " + response.data.profile.lastname_th,
-        nameEN: response.data.profile.firstname_en + " " + response.data.profile.lastname_en,
-        photo: imgStr
-      })
+      try {
+        this.setState({
+          id: res.id,
+          nameTH: response.data.profile.firstname_th,
+          lastnameTH: response.data.profile.lastname_th,
+          nameEN: response.data.profile.firstname_en,
+          lastnameEN: response.data.profile.lastname_en,
+          photo: imgStr,
+          room : response.data.camper.bed_room
+        })
+      } catch (error) {
+        Swal.fire({
+          title: '<strong>คำเตือน !</strong>',
+          type: 'warning',
+          html:
+            'ขออภัยเกิดข้อผิดพลาด<br/>' +
+            'คุณอาจไม่มีข้อมูลในระบบ<br/>'+
+            'กรุณาติดต่อผู้ดูแลระบบ<br/><br/>',
+          showCloseButton: true,
+          showCancelButton: false,
+          showConfirmButton: false
+        }).then(()=>{
+          window.location.reload();
+        })
+      }
     })
   }
 
+  setFlavor = (id) => {
+    switch (id) {
+      case 1: this.setState({ flavor: 'สีดำ' })
+      break;
+      case 2: this.setState({ flavor: 'สีส้ม' })
+      break;
+      case 3: this.setState({ flavor: 'สีแดง' })
+      break;
+      case 4: this.setState({ flavor: 'สีฟ้า' })
+      break;
+      case 5: this.setState({ flavor: 'สีเขียว' })
+      break;
+      case 6: this.setState({ flavor: 'สีน้ำตาล' })
+      break;
+      case 7: this.setState({ flavor: 'สีเหลือง' })
+      break;
+      case 8: this.setState({ flavor: 'สีม่วง' })
+      break;
+      case 9: this.setState({ flavor: 'สีชมพู' })
+      break;
+      case 10: this.setState({ flavor: 'สีเขียวแก่' })
+      break;
+      case null:this.setState({flavor : 'ไม่มีสี'})
+        break;
 
-  handleData = (e) => {
-    const { id, wifi } = this.state
-    CamperService.checkInCamper({ checkIn: "checked", citizen: id, wifi: wifi })
+      default :
+        break;
+    }
+  }
+
+
+  handleData = async (e) => {
+    const { id, wifi, wipId } = this.state
+    await CamperService.checkInCamper({ checkIn: "checked", citizen: id, wifi: wifi ,wipId : wipId})
+      Swal.fire({
+        type: 'success',
+        title: 'สำเร็จ',
+        text: 'ยืนยันข้อมูลเรียบร้อยแล้ว',
+      }).then(()=>{
+        window.location.reload();
+      })
+      
   }
 
   render() {
@@ -96,12 +160,12 @@ class checkIn extends Component {
                       <Col md={{ size: 9 }}>
                         ข้อมูลส่วนตัว (กรุณาตรวจสอบข้อมูล)<br />
                         เลขบัตรประจำตัว : {this.state.id}<br />
-                        ชื่อ-นามสกุล (ไทย) :  {this.state.nameTH} <br />
-                        ชื่อ-นามสกุล (อังกฤษ) : {this.state.nameEN} <br />
+                        ชื่อ-นามสกุล (ไทย) :  {this.state.nameTH} {this.state.lastnameTH}<br />
+                        ชื่อ-นามสกุล (อังกฤษ) : {this.state.nameEN} {this.state.lastnameEN}<br />
                         <br />
                         ข้อมูลค่าย <br />
-                        รส :  <br />
-                        ห้องพัก : <br />
+                        รส :  {this.state.flavor}<br />
+                        ห้องพัก : {this.state.room}<br />
                       </Col>
                     </Row>
                     : <RuleText />}

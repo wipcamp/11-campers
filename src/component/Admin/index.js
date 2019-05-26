@@ -31,6 +31,9 @@ class index extends Component {
     nameEN: '',
     lastname_en: '',
     lastname_th: '',
+    flavor: '',
+    room: '',
+    editdata : true
   }
 
   componentDidMount() {
@@ -40,7 +43,7 @@ class index extends Component {
   checkRole = async () => {
     let role = await AuthService.getRole()
     try {
-      if (role != 10) {
+      if (role !== 10) {
         Swl.fire(
           'คุณไม่ได้รับสิทธิ์ให้ใช้งาน'
         )
@@ -70,31 +73,83 @@ class index extends Component {
 
   getPerson = async (e) => {
     socket.on('personClient', async (res) => {
-      console.log(res)
       let response = await service.getProfile(res.id)
+      this.setFlavor(response.data.camper.flavor_id)
       const imgStr = String.fromCharCode.apply(null, new Uint8Array(res.photo));
-      this.setState({
-        id: res.id,
-        nameTH: response.data.profile.firstname_th,
-        lastname_th: response.data.profile.lastname_th,
-        nameEN: response.data.profile.firstname_en,
-        lastname_en: response.data.profile.lastname_en,
-        photo: imgStr
-      })
+      try {
+        this.setState({
+          id: res.id,
+          nameTH: response.data.profile.firstname_th,
+          lastname_th: response.data.profile.lastname_th,
+          nameEN: response.data.profile.firstname_en,
+          lastname_en: response.data.profile.lastname_en,
+          photo: imgStr,
+          room : response.data.camper.bed_room
+        })
+      } catch (error) {
+        Swl.fire({
+          title: '<strong>คำเตือน !</strong>',
+          type: 'warning',
+          html:
+            'ขออภัยเกิดข้อผิดพลาด' +
+            'กรุณาติดต่อผู้ดูแลระบบ',
+          showCloseButton: true,
+          showCancelButton: false,
+          showConfirmButton: false
+        }).then(()=>{
+          window.location.reload();
+        })
+      }
     })
   }
 
-  handleData = () => {
+  setFlavor = (id) => {
+    switch (id) {
+      case 1: this.setState({ flavor: 'สีดำ' })
+      break;
+      case 2: this.setState({ flavor: 'สีส้ม' })
+      break;
+      case 3: this.setState({ flavor: 'สีแดง' })
+      break;
+      case 4: this.setState({ flavor: 'สีฟ้า' })
+      break;
+      case 5: this.setState({ flavor: 'สีเขียว' })
+      break;
+      case 6: this.setState({ flavor: 'สีน้ำตาล' })
+      break;
+      case 7: this.setState({ flavor: 'สีเหลือง' })
+      break;
+      case 8: this.setState({ flavor: 'สีม่วง' })
+      break;
+      case 9: this.setState({ flavor: 'สีชมพู' })
+      break;
+      case 10: this.setState({ flavor: 'สีเขียวแก่' })
+      break;
+      case null:this.setState({flavor : 'ไม่มีสี'})
+        break;
+
+      default :
+        break;
+    }
+  }
+
+
+  handleData = async () => {
     this.setState({ editdata: true })
     const { nameEN, nameTH, id, lastname_en, lastname_th } = this.state
-    let res = ProfileService.editProfileByAdmin({
+    await ProfileService.editProfileByAdmin({
       id: id,
       nameTH: nameTH,
       lastname_th: lastname_th,
       nameEN: nameEN,
       lastname_en: lastname_en
+    }).then(()=>{
+      Swl.fire({
+        type: 'success',
+        title: 'สำเร็จ',
+        text: 'แก้ไขข้อมูลเรียบร้อยแล้ว',
+      })
     })
-    
   }
 
 
@@ -146,8 +201,8 @@ class index extends Component {
                         disabled={this.state.editdata} />
                       <br />
                       ข้อมูลค่าย <br />
-                      สี :  <br />
-                      ห้องพัก : <br />
+                      สี :  {this.state.flavor}<br />
+                      ห้องพัก : {this.state.room}<br />
                     </Col>
                   </Row>
                 }
