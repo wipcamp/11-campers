@@ -5,6 +5,7 @@ import AuthService from '../../service/AuthService'
 
 class LoginFaceBook extends React.Component {
    responseFacebook = async (response) => {
+     console.log(response)
    let res = await AuthService.login(response)
    this.changetoRegisterPage(res.data.role)
   }
@@ -13,6 +14,7 @@ class LoginFaceBook extends React.Component {
       if (CookiesService.get('JWT')) {
         if(parseInt(role) == 10){
           console.log(role,'ok')
+          window.location = '/checkin'
         }else{
           console.log(role,'not ok')
         }
