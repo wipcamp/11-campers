@@ -12,6 +12,7 @@ const AuthService = {
       if (res) {
         Cookies.set('JWT', res.data.token)
         Cookies.set('wip_Id', res.data.wip_id)
+        Cookies.set('role', res.data.role)
         return res
       }
     
@@ -21,6 +22,8 @@ const AuthService = {
     return await api.get('/myrole').catch(error =>{
       if(error === 'Request failed with status code 401'){
         Cookies.remove('JWT')
+        Cookies.remove('role')
+        Cookies.remove('wip_Id')
         window.location.reload()
       }
     })
