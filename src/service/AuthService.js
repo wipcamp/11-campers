@@ -19,13 +19,12 @@ const AuthService = {
   ,
   getRole: async ()=>{
     return await api.get('/myrole').catch(error =>{
-      if(error == 'Request failed with status code 401'){
+      if(error === 'Request failed with status code 401'){
         Cookies.remove('JWT')
         window.location.reload()
       }
     })
   }
-
 }
 
 export default AuthService
