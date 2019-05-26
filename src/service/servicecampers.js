@@ -10,6 +10,13 @@ const service =
   },
   updateScore: async (data,header) => {
     return await api.put('', data, header)
+  },
+  checkInCamper: async (data) => {
+    api.put('campers/checkin',{
+      checked : data.checkIn,
+      citizen : data.citizen,
+      wifi : data.wifi
+    })
   }
     
 }
