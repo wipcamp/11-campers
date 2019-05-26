@@ -15,7 +15,8 @@ const service =
     api.put('campers/checkin',{
       checked : data.checkIn,
       citizen : data.citizen,
-      wifi : data.wifi
+      wifi : data.wifi,
+      wipId : data.wipId
     })
   }
     

@@ -1,9 +1,24 @@
 import api from '../config/apiprofile'
+import Swal from 'sweetalert2'
 
 const service = {
   getProfile: async (id) => {
-    let res = await api.post('testgetprofile', {citizen:id})
-    return res
+    try {
+    return await api.post('testgetprofile', {citizen:id})
+    } catch (error) {
+        Swal.fire({
+          title: '<strong>คำเตือน !</strong>',
+          type: 'warning',
+          html:
+            'ขออภัยเกิดข้อผิดพลาด' +
+            'กรุณาติดต่อผู้ดูแลระบบ',
+          showCloseButton: true,
+          showCancelButton: false,
+          showConfirmButton: false
+        }).then(()=>{
+          window.location.reload();
+        })
+    }
   },
   editProfileByAdmin: async (data) => {
     api.put('profile/editprofile',{
