@@ -9,9 +9,10 @@ class Routes extends React.Component {
     return(
       <Router>
           <div className="body">
-            <Route exact path="/" component={checkIn} />
+            <Route exact path="/" component={login} />
             <Route exact path="/login" component={login} />
             <Route exact path="/admin" component={admin} />
+            <Route exact path="/checkin" component={checkIn} />
           </div>
       </Router>
     )
