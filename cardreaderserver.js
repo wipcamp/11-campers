@@ -22,10 +22,10 @@ myReader.on('card-inserted', async person => {
   console.log('=============================================')
   console.log('Receiving Image')
   const photo = await person.getPhoto()
-  const fileStream = fs.createWriteStream(`${cid}.bmp`)
+  // const fileStream = fs.createWriteStream(`${cid}.bmp`)
   const photoBuff = Buffer.from(photo)
-  fileStream.write(photoBuff)
-  fileStream.close()
+  // fileStream.write(photoBuff)
+  // fileStream.close()
   io.emit(`personClient`,{id: cid,photo: photoBuff })
 })
 
