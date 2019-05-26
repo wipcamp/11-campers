@@ -9,8 +9,14 @@ import Card from '../Core/Card'
 import { Container, Row, Col, Button, Input } from 'reactstrap';
 import service from '../../service/serviceprofile';
 import ProfileService from '../../service/serviceprofile'
+import styled from 'styled-components'
 
 const socket = socketIOClient(process.env.REACT_APP_PATH_SOCKET)
+
+const Img = styled.img`
+  width : 100%;
+  margin-bottom:5%;
+`
 
 class index extends Component {
 
@@ -25,8 +31,6 @@ class index extends Component {
     nameEN: '',
     lastname_en: '',
     lastname_th: '',
-    editdata: true,
-    btn: false,
   }
 
   componentDidMount() {
@@ -77,14 +81,12 @@ class index extends Component {
         lastname_en: response.data.profile.lastname_en,
         photo: imgStr
       })
-      console.log(response)
     })
   }
 
   handleData = () => {
     this.setState({ editdata: true })
     const { nameEN, nameTH, id, lastname_en, lastname_th } = this.state
-    console.log(this.state.nameEN, this.state.nameTH)
     let res = ProfileService.editProfileByAdmin({
       id: id,
       nameTH: nameTH,
@@ -92,11 +94,16 @@ class index extends Component {
       nameEN: nameEN,
       lastname_en: lastname_en
     })
+    
   }
 
 
   render() {
     if (this.state.redirect) {
+      Swl.fire(
+        'Session หมดอายุ',
+        'กรุณา Login ใหม่'
+      )
       return <Redirect push to="/login" />
     }
     this.getPerson()
@@ -110,7 +117,7 @@ class index extends Component {
                 text={
                   <Row>
                     <Col className="text-center" md={{ size: 3 }}>
-                      <img src={`data:image/jpeg;base64,${btoa(this.state.photo)}`} /><br /><br />
+                      <Img src='/img/insteadcitizenpic.jpg' />
                       <Button onClick={() => this.setState({ editdata: false })}
                         disabled={this.state.editdata ? false : true}>
                         แก้ไขข้อมูล
@@ -139,7 +146,7 @@ class index extends Component {
                         disabled={this.state.editdata} />
                       <br />
                       ข้อมูลค่าย <br />
-                      รส :  <br />
+                      สี :  <br />
                       ห้องพัก : <br />
                     </Col>
                   </Row>
