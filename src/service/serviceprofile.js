@@ -21,13 +21,28 @@ const service = {
     }
   },
   editProfileByAdmin: async (data) => {
-    api.put('profile/editprofile',{
-    citizen: data.id,
-    nameTh: data.nameTH,
-    lastname_th:data.lastname_th,
-    nameEn : data.nameEN,
-    lastname_en:data.lastname_en,
-    })
+    try {
+      return api.put('profile/editprofile',{
+      citizen: data.id,
+      nameTh: data.nameTH,
+      lastname_th:data.lastname_th,
+      nameEn : data.nameEN,
+      lastname_en:data.lastname_en,
+      })
+    } catch (error) {
+       Swal.fire({
+          title: '<strong>คำเตือน !</strong>',
+          type: 'warning',
+          html:
+            'ขออภัยเกิดข้อผิดพลาด' +
+            'กรุณาติดต่อผู้ดูแลระบบ',
+          showCloseButton: true,
+          showCancelButton: false,
+          showConfirmButton: false
+        }).then(()=>{
+          window.location.reload();
+        })
+    }
   }
 }
 

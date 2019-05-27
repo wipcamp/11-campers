@@ -149,6 +149,19 @@ class index extends Component {
         title: 'สำเร็จ',
         text: 'แก้ไขข้อมูลเรียบร้อยแล้ว',
       })
+    }).catch(() =>{
+      Swl.fire({
+        title: '<strong>คำเตือน !</strong>',
+        type: 'warning',
+        html:
+          'ขออภัยเกิดข้อผิดพลาด' +
+          'กรุณาติดต่อผู้ดูแลระบบ',
+        showCloseButton: true,
+        showCancelButton: false,
+        showConfirmButton: false
+      }).then(()=>{
+        window.location.reload();
+      })
     })
   }
 
