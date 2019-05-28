@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import socketIOClient from 'socket.io-client'
 import { Container, Row, Col, Button, Input } from 'reactstrap';
-import styled from 'styled-components'
 import Card from '../Core/Card';
 import Bg from '../Core/Background'
 import RuleText from '../Core/RuleWiFiText'
@@ -12,11 +11,6 @@ import Btn from '../Core/Button'
 import Content from './Content'
 
 const socket = socketIOClient(process.env.REACT_APP_PATH_SOCKET)
-
-const Img = styled.img`
-  width: 100%;
-  margin-bottom:5%;
-`
 
 class checkIn extends Component {
   state = {
@@ -159,7 +153,7 @@ class checkIn extends Component {
   render() {
     this.getPerson()
     const { height, showID,
-      over, photo, id, img,
+      photo, id, img,
       nameTH, nameEN, lastnameTH,
       lastnameEN, flavor, room,
       subtitle, showBtn, showConfirm,
@@ -176,12 +170,9 @@ class checkIn extends Component {
                   title="Wip Camp #11"
                   text={showID ?
                     <Row>
-                      <Col md={{ size: 3 }}>
-                        <Img src={over ? photo : img}
-                          onMouseOver={() => this.setState({ over: true })} />
-                      </Col>
                       <Content
-                        sourcImg={over ? photo : img}
+                        sourcImg={img}
+                        imgOver={photo}
                         citizen={id}
                         nameTH={nameTH}
                         lastnameTH={lastnameTH}
