@@ -10,8 +10,6 @@ import { Container, Row, Col, Button, Input } from 'reactstrap';
 import service from '../../service/serviceprofile';
 import ProfileService from '../../service/serviceprofile'
 import styled from 'styled-components'
-import SwalCom from '../Core/SweetAlert'
-import SweetAlert from '../Core/SweetAlert';
 
 const socket = socketIOClient(process.env.REACT_APP_PATH_SOCKET)
 
