@@ -10,6 +10,8 @@ import { Container, Row, Col, Button, Input } from 'reactstrap';
 import service from '../../service/serviceprofile';
 import ProfileService from '../../service/serviceprofile'
 import styled from 'styled-components'
+import SwalCom from '../Core/SweetAlert'
+import SweetAlert from '../Core/SweetAlert';
 
 const socket = socketIOClient(process.env.REACT_APP_PATH_SOCKET)
 
@@ -33,7 +35,7 @@ class index extends Component {
     lastname_th: '',
     flavor: '',
     room: '',
-    editdata : true
+    editdata : true,
   }
 
   componentDidMount() {
@@ -84,21 +86,11 @@ class index extends Component {
           nameEN: response.data.profile.firstname_en,
           lastname_en: response.data.profile.lastname_en,
           photo: imgStr,
+          wipId: response.data.profile.wip_id,
           room : response.data.camper.bed_room
         })
       } catch (error) {
-        Swl.fire({
-          title: '<strong>คำเตือน !</strong>',
-          type: 'warning',
-          html:
-            'ขออภัยเกิดข้อผิดพลาด' +
-            'กรุณาติดต่อผู้ดูแลระบบ',
-          showCloseButton: true,
-          showCancelButton: false,
-          showConfirmButton: false
-        }).then(()=>{
-          window.location.reload();
-        })
+        return  
       }
     })
   }

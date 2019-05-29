@@ -69,7 +69,8 @@ class checkIn extends Component {
           nameEN: response.data.profile.firstname_en,
           lastnameEN: response.data.profile.lastname_en,
           photo: `data:image/jpeg;base64,${btoa(imgStr)}`,
-          room: response.data.camper.bed_room
+          room: response.data.camper.bed_room,
+          wipId: response.data.profile.wip_id
         })
       } catch (error) {
         Swal.fire({
