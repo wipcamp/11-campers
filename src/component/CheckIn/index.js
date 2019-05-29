@@ -132,7 +132,7 @@ class checkIn extends Component {
         title: 'สำเร็จ',
         text: 'ยืนยันข้อมูลเรียบร้อยแล้ว',
       }).then(() => {
-        window.location.reload();
+        // window.location.reload();
       })
     }).catch(() => {
       Swal.fire({
